@@ -175,6 +175,10 @@
             </tr>
         </tfoot>
     </table>
+   <div style="text-align: center; margin-top: 20px;">
+        <button onclick="downloadStats()">Descargar Stats</button>
+    </div>
+
     <script>
         function adjustPoints(stat, adjustment) {
             const input = document.getElementById(stat);
@@ -186,6 +190,7 @@
                 input.value = 5;
             }
         }
+
         function checkMinValue(stat) {
             const input = document.getElementById(stat);
             if (input.value < 5) {
@@ -193,6 +198,7 @@
             }
             updateTotal();
         }
+
         function updateTotal() {
             const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
             let total = 0;
@@ -202,6 +208,24 @@
                 total += Math.max(0, baseValue - initialBase);
             });
             document.getElementById("total").textContent = total;
+        }
+
+        function downloadStats() {
+            const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
+            let data = "Stat,Valor\n";
+            stats.forEach(stat => {
+                const value = document.getElementById(stat).value;
+                data += `${stat},${value}\n`;
+            });
+
+            // Crear el archivo Blob y descargarlo
+            const blob = new Blob([data], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'stats.csv';
+            a.click();
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
