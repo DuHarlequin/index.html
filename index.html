@@ -65,14 +65,49 @@
                 .stat-container button:hover {
                     background-color: #d8c3a5;
                 }
+
+        .input-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .input-container label {
+                margin: 0 10px;
+            }
+
+            .input-container select, .input-container input[type="text"] {
+                margin: 0 10px;
+            }
     </style>
 </head>
 <body>
     <h2>Tabla de Stats</h2>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" minlength="4" maxlength="15" required>
+        <span id="nombreError" style="color: red; display: none;">El nombre debe tener entre 4 y 15 caracteres.</span>
+    </div>
+    <div class="input-container">
+        <label for="raza">Raza:</label>
+        <select id="raza">
+            <option value="Humano">Humano</option>
+            <option value="Montaras">Montaras</option>
+            <option value="Yuguen">Yuguen</option>
+            <option value="Sinhair">Sinhair</option>
+            <option value="Amarant">Amarant</option>
+            <option value="Alto Elfo">Alto Elfo</option>
+        </select>
+
+        <label for="sexo">Sexo:</label>
+        <select id="sexo">
+            <option value="Macho">Macho</option>
+            <option value="Hembra">Hembra</option>
+        </select>
+    </div>
     <table>
         <thead>
             <tr>
-                <th>Stat</th>
+                <th>Stats</th>
                 <th>Puntos Base</th>
             </tr>
         </thead>
@@ -175,7 +210,7 @@
             </tr>
         </tfoot>
     </table>
-   <div style="text-align: center; margin-top: 20px;">
+    <div style="text-align: center; margin-top: 20px;">
         <button onclick="downloadStats()">Descargar Stats</button>
     </div>
 
@@ -211,11 +246,22 @@
         }
 
         function downloadStats() {
+            const nombre = document.getElementById("nombre").value;
+            const raza = document.getElementById("raza").value;
+            const sexo = document.getElementById("sexo").value;
+
+            if (nombre.length < 4 || nombre.length > 15) {
+                document.getElementById("nombreError").style.display = "inline";
+                return;
+            } else {
+                document.getElementById("nombreError").style.display = "none";
+            }
+
             const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
-            let data = "Stats-Valor\n";
+            let data = `Nombre: ${nombre}\nRaza: ${raza}\nSexo: ${sexo}\nStat: Valor\n`;
             stats.forEach(stat => {
                 const value = document.getElementById(stat).value;
-                data += `${stat}:${ value}\n`;
+                data += `${stat}: ${value}\n`;
             });
 
             // Crear el archivo Blob y descargarlo como .txt
