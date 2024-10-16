@@ -212,18 +212,18 @@
 
         function downloadStats() {
             const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
-            let data = "Stat,Valor\n";
+            let data = "Stats-Valor\n";
             stats.forEach(stat => {
                 const value = document.getElementById(stat).value;
-                data += `${stat},${value}\n`;
+                data += `${stat}:${ value}\n`;
             });
 
-            // Crear el archivo Blob y descargarlo
-            const blob = new Blob([data], { type: 'text/csv' });
+            // Crear el archivo Blob y descargarlo como .txt
+            const blob = new Blob([data], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'stats.csv';
+            a.download = 'stats.txt';
             a.click();
             URL.revokeObjectURL(url);
         }
