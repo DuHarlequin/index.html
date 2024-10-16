@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Stats</title>
+    <style>
+        body {
+            font-family: 'Garamond', serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            font-family: 'Garamond', serif;
+            color: #643d1e;
+        }
+
+        table {
+            width: 30%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #faf3e6;
+            border: 2px solid #643d1e;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        th, td {
+            border: 1px solid #643d1e;
+            padding: 10px;
+            text-align: center;
+            font-family: 'Garamond', serif;
+            color: #333;
+        }
+
+        th {
+            background-color: #c9b79c;
+        }
+
+        .stat-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .stat-container input[type="number"] {
+                width: 50px;
+                text-align: center;
+                border: 1px solid #643d1e;
+                background-color: #fff8dc;
+            }
+
+            .stat-container button {
+                width: 30px;
+                height: 30px;
+                margin: 0 5px;
+                font-size: 16px;
+                background-color: #c9b79c;
+                border: 1px solid #643d1e;
+                cursor: pointer;
+                color: #333;
+            }
+
+                .stat-container button:hover {
+                    background-color: #d8c3a5;
+                }
+    </style>
+</head>
+<body>
+    <h2>Tabla de Stats</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Stat</th>
+                <th>Puntos Base</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>FUE</td>
+                <td>
+                    <div class="stat-container">
+                        <button onclick="adjustPoints('FUE', -1)">-</button>
+                        <input type="number" id="FUE" value="5" min="5" onchange="checkMinValue('FUE')">
+                        <button onclick="adjustPoints('FUE', 1)">+</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>VIT</td>
+                <td>
+                    <div class="stat-container">
+                        <button onclick="adjustPoints('VIT', -1)">-</button>
+                        <input type="number" id="VIT" value="5" min="5" onchange="checkMinValue('VIT')">
+                        <button onclick="adjustPoints('VIT', 1)">+</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>AGI</td>
+                <td>
+                    <div class="stat-container">
+                        <button onclick="adjustPoints('AGI', -1)">-</button>
+                        <input type="number" id="AGI" value="5" min="5" onchange="checkMinValue('AGI')">
+                        <button onclick="adjustPoints('AGI', 1)">+</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>DES</td>
+                <td>
+                    <div class="stat-container">
+                        <button onclick="adjustPoints('DES', -1)">-</button>
+                        <input type="number" id="DES" value="5" min="5" onchange="checkMinValue('DES')">
+                        <button onclick="adjustPoints('DES', 1)">+</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>SIG</td>
+                <td>
+                    <div class="stat-container">
+                        <button onclick="adjustPoints('SIG', -1)">-</button>
+                        <input type="number" id="SIG" value="5" min="5" onchange="checkMinValue('SIG')">
+                        <button onclick="adjustPoints('SIG', 1)">+</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>PER</td>
+                <td>
+                    <div class="stat-container">
+                        <button onclick="adjustPoints('PER', -1)">-</button>
+                        <input type="number" id="PER" value="5" min="5" onchange="checkMinValue('PER')">
+                        <button onclick="adjustPoints('PER', 1)">+</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>CAR</td>
+                <td>
+                    <div class="stat-container">
+                        <button onclick="adjustPoints('CAR', -1)">-</button>
+                        <input type="number" id="CAR" value="5" min="5" onchange="checkMinValue('CAR')">
+                        <button onclick="adjustPoints('CAR', 1)">+</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>INT</td>
+                <td>
+                    <div class="stat-container">
+                        <button onclick="adjustPoints('INT', -1)">-</button>
+                        <input type="number" id="INT" value="5" min="5" onchange="checkMinValue('INT')">
+                        <button onclick="adjustPoints('INT', 1)">+</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>MAG</td>
+                <td>
+                    <div class="stat-container">
+                        <button onclick="adjustPoints('MAG', -1)">-</button>
+                        <input type="number" id="MAG" value="5" min="5" onchange="checkMinValue('MAG')">
+                        <button onclick="adjustPoints('MAG', 1)">+</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Total de Puntos Agregados</td>
+                <td id="total">0</td>
+            </tr>
+        </tfoot>
+    </table>
+    <script>
+        function adjustPoints(stat, adjustment) {
+            const input = document.getElementById(stat);
+            let newValue = parseInt(input.value) + adjustment;
+            if (newValue >= 5) {
+                input.value = newValue;
+                updateTotal();
+            } else {
+                input.value = 5;
+            }
+        }
+        function checkMinValue(stat) {
+            const input = document.getElementById(stat);
+            if (input.value < 5) {
+                input.value = 5;
+            }
+            updateTotal();
+        }
+        function updateTotal() {
+            const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
+            let total = 0;
+            stats.forEach(stat => {
+                const baseValue = parseInt(document.getElementById(stat).value) || 5;
+                const initialBase = 5;
+                total += Math.max(0, baseValue - initialBase);
+            });
+            document.getElementById("total").textContent = total;
+        }
+    </script>
+</body>
+</html>
