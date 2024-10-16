@@ -6,78 +6,86 @@
     <title>Tabla de Stats</title>
     <style>
         body {
-            font-family: 'Garamond', serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
+    background-image: url('https://i.imgur.com/p8y3zCr.jpeg'); /* Fondo de pergamino */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-size: cover; /* Ajusta la imagen para cubrir toda la pantalla */
+    color: #3B1F1F; /* Color marrón oscuro */
+    font-family: 'Cinzel', serif; /* Fuente estilo medieval */
+    text-align: center;
+    padding: 20px;
+    margin-top: 80px; /* Ajusta este valor según el margen deseado */
 
         h2 {
-            text-align: center;
-            font-family: 'Garamond', serif;
-            color: #643d1e;
+            color: #6b4226; /* Marrón oscuro */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #6b4226;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .input-container, table {
+            background-color: rgba(255, 255, 255, 0.8); /* Transparencia en el fondo */
+            padding: 10px;
+            border: 2px solid #3B1F1F;
+            margin: 20px auto;
+            width: 80%;
+            border-radius: 10px;
+            max-width: 800px;
+        }
+
+        label {
+            font-size: 1.2em;
+            color: #4e2a1a;
+        }
+
+        select, input[type="text"] {
+            font-size: 1em;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #6b4226;
+            background-color: #f3e6c5;
         }
 
         table {
-            width: 30%;
-            margin: auto;
+            width: 100%;
             border-collapse: collapse;
-            background-color: #faf3e6;
-            border: 2px solid #643d1e;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+            font-size: 1.2em;
         }
 
         th, td {
-            border: 1px solid #643d1e;
             padding: 10px;
-            text-align: center;
-            font-family: 'Garamond', serif;
-            color: #333;
+            border: 1px solid #3B1F1F;
         }
 
         th {
-            background-color: #c9b79c;
+            background-color: #d4b075;
         }
 
-        .stat-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        td {
+            background-color: #f7e7be;
         }
 
-            .stat-container input[type="number"] {
-                width: 50px;
-                text-align: center;
-                border: 1px solid #643d1e;
-                background-color: #fff8dc;
-            }
-
-            .stat-container button {
-                width: 30px;
-                height: 30px;
-                margin: 0 5px;
-                font-size: 16px;
-                background-color: #c9b79c;
-                border: 1px solid #643d1e;
-                cursor: pointer;
-                color: #333;
-            }
-
-                .stat-container button:hover {
-                    background-color: #d8c3a5;
-                }
-
-        .input-container {
-            text-align: center;
-            margin-bottom: 20px;
+        button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            background-color: #6b4226;
+            color: #f9f6f0;
+            border: 2px solid #3B1F1F;
+            border-radius: 10px;
+            cursor: pointer;
         }
 
-            .input-container label {
-                margin: 0 10px;
+            button:hover {
+                background-color: #3B1F1F;
             }
 
-            .input-container select, .input-container input[type="text"] {
-                margin: 0 10px;
-            }
+        #nombreError {
+            color: red;
+            font-size: 0.9em;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap'); /* Fuente medieval */
     </style>
 </head>
 <body>
@@ -258,7 +266,7 @@
             }
 
             const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
-            let data = `Nombre: ${nombre}\nRaza: ${raza}\nSexo: ${sexo}\nStat: Valor\n`;
+            let data = `Nombre: ${nombre}\nRaza: ${raza}\nSexo: ${sexo}\nStats-Valor\n`;
             stats.forEach(stat => {
                 const value = document.getElementById(stat).value;
                 data += `${stat}: ${value}\n`;
