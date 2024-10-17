@@ -288,6 +288,9 @@
 
         function downloadStats() {
             const nombre = document.getElementById("nombre").value;
+            const raza = document.getElementById("raza").value;
+            const sexo = document.getElementById("sexo").value;
+
             if (nombre.length < 4 || nombre.length > 15) {
                 document.getElementById("nombreError").style.display = "inline";
                 return;
@@ -296,7 +299,7 @@
             }
 
             const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
-            let data = `Nombre: ${nombre}\nStat: Valor\n`;
+            let data = `Nombre: ${nombre}\nRaza: ${raza}\nSexo: ${sexo}\nStat: Valor\n`;
             stats.forEach(stat => {
                 const value = document.getElementById(stat).value;
                 data += `${stat}: ${value}\n`;
