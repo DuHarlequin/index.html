@@ -146,7 +146,7 @@
     <table>
         <thead>
             <tr>
-                <th>Stat</th>
+                <th>Stats</th>
                 <th>Puntos Base</th>
             </tr>
         </thead>
@@ -256,6 +256,29 @@
 
 
     <script>
+
+         // Diccionario con stats por raza
+        const defaultStats = {
+            "Humano": { FUE: 5, VIT: 5, AGI: 5, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
+            "Montaras": { FUE: 20, VIT: 15, AGI: 15, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
+            "Yuguen": { FUE: 5, VIT: 5, AGI: 15, DES: 5, SIG: 5, PER: 20, CAR: 5, INT: 5, MAG: 15 },
+            "Sinhair": { FUE: 5, VIT: 5, AGI: 15, DES: 20, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 15 },
+            "Amarant": { FUE: 15, VIT: 15, AGI: 20, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
+            "Alto Elfo": { FUE: 5, VIT: 5, AGI: 5, DES: 5, SIG: 5, PER: 15, CAR: 5, INT: 15, MAG: 20 }
+             };
+
+              // Función para ajustar los stats al seleccionar la raza
+        document.getElementById("raza").addEventListener("change", function() {
+            const selectedRaza = this.value;
+            const stats = defaultStats[selectedRaza];
+
+            for (let stat in stats) {
+                document.getElementById(stat).value = stats[stat];
+            }
+
+            updateTotal();
+        });
+
         function adjustPoints(stat, adjustment) {
             const input = document.getElementById(stat);
             let newValue = parseInt(input.value) + adjustment;
