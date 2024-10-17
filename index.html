@@ -256,59 +256,82 @@
 
 
     <script>
-
-         // Diccionario con stats por raza
-        const defaultStats = {
+        // Diccionario con los stats mínimos por raza
+        const razaStats = {
             "Humano": { FUE: 5, VIT: 5, AGI: 5, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
             "Montaras": { FUE: 20, VIT: 15, AGI: 15, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
             "Yuguen": { FUE: 5, VIT: 5, AGI: 15, DES: 5, SIG: 5, PER: 20, CAR: 5, INT: 5, MAG: 15 },
             "Sinhair": { FUE: 5, VIT: 5, AGI: 15, DES: 20, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 15 },
             "Amarant": { FUE: 15, VIT: 15, AGI: 20, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
             "Alto Elfo": { FUE: 5, VIT: 5, AGI: 5, DES: 5, SIG: 5, PER: 15, CAR: 5, INT: 15, MAG: 20 }
-             };
+        };
 
-              // Función para ajustar los stats al seleccionar la raza
+        let totalPuntosAgregados = 0;
+
+        // Función para ajustar los stats al seleccionar la raza
         document.getElementById("raza").addEventListener("change", function() {
             const selectedRaza = this.value;
-            const stats = defaultStats[selectedRaza];
+            const stats = razaStats[selectedRaza];
 
             for (let stat in stats) {
-                document.getElementById(stat).value = stats[stat];
+                const input = document.getElementById(stat);
+                input.min = stats[stat]; // Establece el valor mínimo basado en la raza
+                input.value = stats[stat]; // Asigna el valor base de la raza
             }
+
+            // Reiniciar el total de puntos agregados al cambiar de raza
+            totalPuntosAgregados = 0;
+            document.getElementById("total").textContent = totalPuntosAgregados;
 
             updateTotal();
         });
 
+        // Función para ajustar los puntos de los stats
         function adjustPoints(stat, adjustment) {
             const input = document.getElementById(stat);
+            const minStatValue = parseInt(input.min); // Valor mínimo basado en la raza
             let newValue = parseInt(input.value) + adjustment;
-            if (newValue >= 5) {
+
+            if (newValue >= minStatValue) {
                 input.value = newValue;
+
+                // Solo sumar al total si se agregan puntos adicionales sobre los valores base
+                if (adjustment > 0) {
+                    totalPuntosAgregados += adjustment;
+                } else if (adjustment < 0 && totalPuntosAgregados > 0) {
+                    totalPuntosAgregados += adjustment;
+                }
+
+                document.getElementById("total").textContent = totalPuntosAgregados;
                 updateTotal();
-            } else {
-                input.value = 5;
             }
         }
 
+        // Función para verificar que el valor de un stat no baje del mínimo permitido
         function checkMinValue(stat) {
             const input = document.getElementById(stat);
-            if (input.value < 5) {
-                input.value = 5;
+            const minStatValue = parseInt(input.min);
+
+            if (parseInt(input.value) < minStatValue) {
+                input.value = minStatValue;
             }
+
             updateTotal();
         }
 
+        // Función para actualizar el total de puntos
         function updateTotal() {
             const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
             let total = 0;
             stats.forEach(stat => {
                 const baseValue = parseInt(document.getElementById(stat).value) || 5;
-                const initialBase = 5;
+                const initialBase = parseInt(document.getElementById(stat).min);
                 total += Math.max(0, baseValue - initialBase);
             });
             document.getElementById("total").textContent = total;
         }
 
+        // Función para descargar los stats
         function downloadStats() {
             const nombre = document.getElementById("nombre").value;
             const raza = document.getElementById("raza").value;
@@ -338,9 +361,23 @@
             URL.revokeObjectURL(url);
         }
 
-         function toggleDarkMode() {
+        // Función para alternar el modo oscuro
+        function toggleDarkMode() {
             document.body.classList.toggle("dark-mode");
         }
+
+        // Inicializar los valores por defecto al cargar la página
+        document.addEventListener("DOMContentLoaded", function() {
+            const raza = document.getElementById("raza").value;
+            if (raza) {
+                const stats = razaStats[raza];
+                for (let stat in stats) {
+                    const input = document.getElementById(stat);
+                    input.min = stats[stat]; // Inicializa el valor mínimo
+                    input.value = stats[stat]; // Inicializa los valores de los stats
+                }
+            }
+        });
     </script>
 </body>
 </html>
