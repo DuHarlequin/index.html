@@ -113,9 +113,6 @@
     </style>
 </head>
 <body>
-    <div style="text-align: center; margin-top: 20px;">
-        <button onclick="toggleDarkMode()">Cambiar a Modo Oscuro</button> <!-- Botón para cambiar de modo -->
-    </div>
 
     <h2>Tabla de Stats</h2>
 
@@ -255,85 +252,89 @@
         <button onclick="downloadStats()">Descargar Stats</button>
     </div>
 
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="downloadStats('bbcode')">Descargar en BBCode</button>
+    </div>
+
 
 
     <script>
-        // Diccionario con los stats mínimos por raza
-        const razaStats = {
-            "Humano": { FUE: 5, VIT: 5, AGI: 5, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
-            "Montaras": { FUE: 20, VIT: 15, AGI: 15, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
-            "Yuguen": { FUE: 5, VIT: 5, AGI: 15, DES: 5, SIG: 5, PER: 20, CAR: 5, INT: 5, MAG: 15 },
-            "Sinhair": { FUE: 5, VIT: 5, AGI: 15, DES: 20, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 15 },
-            "Amarant": { FUE: 15, VIT: 15, AGI: 20, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
-            "Alto Elfo": { FUE: 5, VIT: 5, AGI: 5, DES: 5, SIG: 5, PER: 15, CAR: 5, INT: 15, MAG: 20 }
-        };
+            // Diccionario con los stats mínimos por raza
+            const razaStats = {
+                "Humano": { FUE: 5, VIT: 5, AGI: 5, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
+                "Montaras": { FUE: 20, VIT: 15, AGI: 15, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
+                "Yuguen": { FUE: 5, VIT: 5, AGI: 15, DES: 5, SIG: 5, PER: 20, CAR: 5, INT: 5, MAG: 15 },
+                "Sinhair": { FUE: 5, VIT: 5, AGI: 15, DES: 20, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 15 },
+                "Amarant": { FUE: 15, VIT: 15, AGI: 20, DES: 5, SIG: 5, PER: 5, CAR: 5, INT: 5, MAG: 5 },
+                "Alto Elfo": { FUE: 5, VIT: 5, AGI: 5, DES: 5, SIG: 5, PER: 15, CAR: 5, INT: 15, MAG: 20 }
+            };
 
-        let totalPuntosAgregados = 0;
+            let totalPuntosAgregados = 0;
 
-        // Función para ajustar los stats al seleccionar la raza
-        document.getElementById("raza").addEventListener("change", function() {
-            const selectedRaza = this.value;
-            const stats = razaStats[selectedRaza];
+            // Función para ajustar los stats al seleccionar la raza
+            document.getElementById("raza").addEventListener("change", function() {
+                const selectedRaza = this.value;
+                const stats = razaStats[selectedRaza];
 
-            for (let stat in stats) {
-                const input = document.getElementById(stat);
-                input.min = stats[stat]; // Establece el valor mínimo basado en la raza
-                input.value = stats[stat]; // Asigna el valor base de la raza
-            }
-
-            // Reiniciar el total de puntos agregados al cambiar de raza
-            totalPuntosAgregados = 0;
-            document.getElementById("total").textContent = totalPuntosAgregados;
-
-            updateTotal();
-        });
-
-        // Función para ajustar los puntos de los stats
-        function adjustPoints(stat, adjustment) {
-            const input = document.getElementById(stat);
-            const minStatValue = parseInt(input.min); // Valor mínimo basado en la raza
-            let newValue = parseInt(input.value) + adjustment;
-
-            if (newValue >= minStatValue) {
-                input.value = newValue;
-
-                // Solo sumar al total si se agregan puntos adicionales sobre los valores base
-                if (adjustment > 0) {
-                    totalPuntosAgregados += adjustment;
-                } else if (adjustment < 0 && totalPuntosAgregados > 0) {
-                    totalPuntosAgregados += adjustment;
+                for (let stat in stats) {
+                    const input = document.getElementById(stat);
+                    input.min = stats[stat]; // Establece el valor mínimo basado en la raza
+                    input.value = stats[stat]; // Asigna el valor base de la raza
                 }
 
+                // Reiniciar el total de puntos agregados al cambiar de raza
+                totalPuntosAgregados = 0;
                 document.getElementById("total").textContent = totalPuntosAgregados;
+
+                updateTotal();
+            });
+
+            // Función para ajustar los puntos de los stats
+            function adjustPoints(stat, adjustment) {
+                const input = document.getElementById(stat);
+                const minStatValue = parseInt(input.min); // Valor mínimo basado en la raza
+                let newValue = parseInt(input.value) + adjustment;
+
+                if (newValue >= minStatValue) {
+                    input.value = newValue;
+
+                    // Solo sumar al total si se agregan puntos adicionales sobre los valores base
+                    if (adjustment > 0) {
+                        totalPuntosAgregados += adjustment;
+                    } else if (adjustment < 0 && totalPuntosAgregados > 0) {
+                        totalPuntosAgregados += adjustment;
+                    }
+
+                    document.getElementById("total").textContent = totalPuntosAgregados;
+                    updateTotal();
+                }
+            }
+
+            // Función para verificar que el valor de un stat no baje del mínimo permitido
+            function checkMinValue(stat) {
+                const input = document.getElementById(stat);
+                const minStatValue = parseInt(input.min);
+
+                if (parseInt(input.value) < minStatValue) {
+                    input.value = minStatValue;
+                }
+
                 updateTotal();
             }
-        }
 
-        // Función para verificar que el valor de un stat no baje del mínimo permitido
-        function checkMinValue(stat) {
-            const input = document.getElementById(stat);
-            const minStatValue = parseInt(input.min);
-
-            if (parseInt(input.value) < minStatValue) {
-                input.value = minStatValue;
+            // Función para actualizar el total de puntos
+            function updateTotal() {
+                const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
+                let total = 0;
+                stats.forEach(stat => {
+                    const baseValue = parseInt(document.getElementById(stat).value) || 5;
+                    const initialBase = parseInt(document.getElementById(stat).min);
+                    total += Math.max(0, baseValue - initialBase);
+                });
+                document.getElementById("total").textContent = total;
             }
 
-            updateTotal();
-        }
-
-        // Función para actualizar el total de puntos
-        function updateTotal() {
-            const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
-            let total = 0;
-            stats.forEach(stat => {
-                const baseValue = parseInt(document.getElementById(stat).value) || 5;
-                const initialBase = parseInt(document.getElementById(stat).min);
-                total += Math.max(0, baseValue - initialBase);
-            });
-            document.getElementById("total").textContent = total;
-        }
-
-        // Función para descargar los stats
+            // Función para descargar los stats
         function downloadStats() {
             const nombre = document.getElementById("nombre").value;
             const raza = document.getElementById("raza").value;
@@ -347,35 +348,49 @@
             }
 
             const stats = ["FUE", "VIT", "AGI", "DES", "SIG", "PER", "CAR", "INT", "MAG"];
-            let data = `Nombre: ${nombre}\nRaza: ${raza}\nSexo: ${sexo}\nStat: Valor\n`;
+
+            // Formato de texto plano
+            let txtData = `Nombre: ${nombre}\nRaza: ${raza}\nSexo: ${sexo}\nStat: Valor\n`;
+            // Formato BBCode
+            let bbcodeData = `[center][i]Nombre:[/i][b]${nombre}[/b][/center] \n[center][i]Raza:[/i][b]${raza}[/b][/center] \n[center][i]Sexo:[/i][b]${sexo}[/b][/center] \n[center][i]Stats:[/i][b]XX[/b][/center]\n`;
+
             stats.forEach(stat => {
                 const value = document.getElementById(stat).value;
-                data += `${stat}: ${value}\n`;
+                txtData += `${stat}: ${value}\n`;
+                bbcodeData += `[center][i]${stat}:[/i][b]${value}[/b][/center] \n`;
             });
 
-            // Crear el archivo Blob y descargarlo como .txt
-            const blob = new Blob([data], { type: 'text/plain' });
+            // Crear archivo .txt
+            downloadFile(txtData, 'stats.txt', 'text/plain');
+
+            // Crear archivo .bbcode
+            downloadFile(bbcodeData, 'stats.bbcode', 'text/plain');
+        }
+
+        // Función auxiliar para descargar archivos
+        function downloadFile(data, filename, type) {
+            const blob = new Blob([data], { type });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'stats.txt';
+            a.download = filename;
             a.click();
             URL.revokeObjectURL(url);
         }
 
 
-        // Inicializar los valores por defecto al cargar la página
-        document.addEventListener("DOMContentLoaded", function() {
-            const raza = document.getElementById("raza").value;
-            if (raza) {
-                const stats = razaStats[raza];
-                for (let stat in stats) {
-                    const input = document.getElementById(stat);
-                    input.min = stats[stat]; // Inicializa el valor mínimo
-                    input.value = stats[stat]; // Inicializa los valores de los stats
+            // Inicializar los valores por defecto al cargar la página
+            document.addEventListener("DOMContentLoaded", function() {
+                const raza = document.getElementById("raza").value;
+                if (raza) {
+                    const stats = razaStats[raza];
+                    for (let stat in stats) {
+                        const input = document.getElementById(stat);
+                        input.min = stats[stat]; // Inicializa el valor mínimo
+                        input.value = stats[stat]; // Inicializa los valores de los stats
+                    }
                 }
-            }
-        });
+            });
     </script>
 </body>
 </html>
